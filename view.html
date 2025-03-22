@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bunny Tools</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- AdMob Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-2717898931409989" crossorigin="anonymous"></script>
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background: linear-gradient(135deg, red 0%, yellow 100%);/* Dark Blue Background */
+      color: #000;
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .header {
+      padding: 20px;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .tool-card {
+      background-color: rgba(255, 165, 0,0.4);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 15px;
+      transition: all 0.3s ease;
+    }
+    .tool-card:hover {
+      transform: scale(1.05);
+      filter : brightness(120%);
+    }
+    .tool-card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+    .tool-card p {
+      margin: 0 0 15px;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    .tool-card button {
+      background: red;
+      border: none;
+      color: #fff;
+      padding: 8px 15px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .tool-card button:hover {
+      background: purple;
+    }
+    .search-bar {
+      margin-bottom: 20px;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: none;
+      background: darkred;
+      color: #fff;
+    }
+    .search-bar input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .search-bar input:focus {
+      background: orangered;
+      outline: none;
+    }
+    .ad-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      border-top: 1px solid black;
+      padding: 10px;
+      background: #1e2a47;
+    }
+    .btn-custom {
+      background-color: red;
+      color: #fff;
+      border-radius: 5px;
+      border: none;
+      padding: 10px 20px;
+    }
+    .btn-custom:hover {
+      background-color: purple;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <div class="header">
+    <h1 class="display-6">Bunny Tools - Tools Library</h1>
+    <button class="btn-custom" onclick="window.location.href='index.html'">Back to Home</button>
+  </div>
+
+  <!-- Search Bar -->
+  <div class="search-bar p-3">
+    <input type="text" id="searchInput" placeholder="Search for tools...">
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="container">
+      <!-- Tool Cards -->
+      <div id="toolList">
+        <h4>Converter</h4>
+<div class="tool-card">
+  <h3>Area Converter</h3>
+  <p>Convert between different area units.</p>
+  <button onclick="showToolDetails('area.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Cooking Converter</h3>
+  <p>Convert cooking measurements like tsp, tbsp, etc.</p>
+  <button onclick="showToolDetails('cooking.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Currency Converter</h3>
+  <p>Convert between different currencies like USD to INR.</p>
+  <button onclick="showToolDetails('currency.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Data Speed Converter</h3>
+  <p>Convert data transfer speeds like bps to Mbps.</p>
+  <button onclick="showToolDetails('dataspeed.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Length Converter</h3>
+  <p>Convert between different length units like km to m.</p>
+  <button onclick="showToolDetails('length.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Power Converter</h3>
+  <p>Convert power units like watts to kilowatts.</p>
+  <button onclick="showToolDetails('power.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Pressure Converter</h3>
+  <p>Convert pressure units like atm to psi.</p>
+  <button onclick="showToolDetails('preesure.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Speed Converter</h3>
+  <p>Convert speed units like km/h to m/s.</p>
+  <button onclick="showToolDetails('speed.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Storage Converter</h3>
+  <p>Convert storage units like GB to MB.</p>
+  <button onclick="showToolDetails('storage.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Temperature Converter</h3>
+  <p>Convert temperatures between Celsius, Fahrenheit, and Kelvin.</p>
+  <button onclick="showToolDetails('temp.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Volume Converter</h3>
+  <p>Convert volume units like ml to l.</p>
+  <button onclick="showToolDetails('volume.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Angle Converter</h3>
+  <p>Convert angle units like cel to rad.</p>
+  <button onclick="showToolDetails('angle.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Numerical Base Converter</h3>
+  <p>Convert numerical base like binary to octal.</p>
+  <button onclick="showToolDetails('numericalbase.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Force Converter</h3>
+  <p>Convert Force like Newton into kilonewton.</p>
+  <button onclick="showToolDetails('force.html')">use</button>
+</div>
+<div class="tool-card">
+  <h3>Torque Converter</h3>
+  <p>Convert Torque like newton metre into dyne metre.</p>
+  <button onclick="showToolDetails('torque.html')">use</button>
+</div>
+
+<div class="tool-card">
+  <h3>Angle Converter</h3>
+  <p>Convert angle units like cel to rad.</p>
+  <button onclick="showToolDetails('angle.html')">use</button>
+</div>
+<h4>Challenge and Quizzes</h4>
+
+        <div class="tool-card">
+  <h3>Math Quiz</h3>
+  <p>Test your math skills with various challenges.</p>
+  <button onclick="showToolDetails('math.html')">Test</button>
+</div>
+
+<div class="tool-card">
+  <h3>Anime Quiz</h3>
+  <p>Challenge your knowledge of anime with exciting questions.</p>
+  <button onclick="showToolDetails('anime.html')">Test</button>
+</div>
+
+<div class="tool-card">
+  <h3>Games Quiz</h3>
+  <p>Test your gaming knowledge and see if you're a true gamer.</p>
+  <button onclick="showToolDetails('games.html')">Test</button>
+</div>
+
+<div class="tool-card">
+  <h3>Geography Quiz</h3>
+  <p>Test your knowledge of the world’s countries and landmarks.</p>
+  <button onclick="showToolDetails('geography.html')">Test</button>
+</div>
+
+<div class="tool-card">
+  <h3>Music Quiz</h3>
+  <p>Challenge yourself with questions about music history and artists.</p>
+  <button onclick="showToolDetails('music.html')">Test</button>
+</div>
+
+<div class="tool-card">
+  <h3>General Knowledge Quiz</h3>
+  <p>Test your general knowledge with a variety of topics.</p>
+  <button onclick="showToolDetails('quiz.html')">Test</button>
+</div>
+
+<div class="tool-card">
+  <h3>Science Quiz</h3>
+  <p>Test your understanding of scientific principles and discoveries.</p>
+  <button onclick="showToolDetails('science.html')">Test</button>
+</div>
+
+<h4>Coding and Encryption</h4>
+<div class="tool-card">
+  <h3>Base64 Encoder/Decoder</h3>
+  <p>Convert text to base64 and vice versa.</p>
+  <button onclick="showToolDetails('base.html')">code</button>
+</div>
+<div class="tool-card">
+  <h3>Binary Encoder/Decoder</h3>
+  <p>Convert text to binary and vice versa.</p>
+  <button onclick="showToolDetails('binary.html')">code</button>
+</div>
+<div class="tool-card">
+  <h3>Web Inspector</h3>
+  <p>Inspect and manipulate web pages.</p>
+  <button onclick="showToolDetails('insp.html')">code</button>
+</div>
+
+<h4>Generator and Fun</h4>
+<div class="tool-card">
+  <h3>Random Image Generator</h3>
+  <p>Generate random images.</p>
+  <button onclick="showToolDetails('imggen.html')">get</button>
+</div>
+<div class="tool-card">
+  <h3>Random Joke Generator</h3>
+  <p>Get a random joke.</p>
+  <button onclick="showToolDetails('joke.html')">get</button>
+</div>
+<div class="tool-card">
+  <h3>OR code generator</h3>
+  <p>Convert text/url/password into qr code.</p>
+  <button onclick="showToolDetails('qrr.html')">get</button>
+</div>
+
+<h4>Calculator</h4>
+<div class="tool-card">
+  <h3>Love Calculator</h3>
+  <p>Calculate your love percentage.</p>
+  <button onclick="showToolDetails('love.html')">open</button>
+</div>
+<div class="tool-card">
+  <h3>Basic Calculator</h3>
+  <p>Perform basic mathematical calculations.</p>
+  <button onclick="showToolDetails('cal.html')">open</button>
+</div>
+  <div class="tool-card">
+  <h3>BMI calculator</h3>
+  <p>Calculate your BMI.</p>
+  <button onclick="showToolDetails('bmi.html')">open</button>
+  </div>
+    <h4>Others</h4>
+    <div class="tool-card">
+  <h3>LCM/HCF finder</h3>
+  <p>Calculate your BMI.</p>
+  <button onclick="showToolDetails('lcm.html')">view</button>
+        </div>
+    <div class="tool-card">
+  <h3>Prime checker</h3>
+  <p>Check wheather a number is prime or not.</p>
+  <button onclick="showToolDetails('prime.html')">view</button>
+    </div>
+        <div class="tool-card">
+           <h3>Image Resizer</h3>
+          <p>resize Image size</p>
+          <button onclick="showToolDetails('imgedi.html')">view</button>
+        </div>
+<div class="tool-card">
+  <h3>Painting canvas</h3>
+  <p>Save your drawing in browser memory!</p>
+  <button onclick="showToolDetails('draw.html')">use</button>
+</div>
+        <!-- mg -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  <script>
+    // Search functionality
+    const toolList = document.getElementById('toolList').children;
+
+  // Search functionality
+  const searchInput = document.getElementById('searchInput');
+  
+  searchInput.addEventListener('input', () => {
+    const searchTerm = searchInput.value.toLowerCase();
+    // Select all tool cards directly
+    const toolCards = document.querySelectorAll('.tool-card');
+    
+    toolCards.forEach((tool) => {
+      const toolName = tool.querySelector('h3').textContent.toLowerCase();
+      if (toolName.includes(searchTerm)) {
+        tool.style.display = 'block';
+      } else {
+        tool.style.display = 'none';
+      }
+    });
+  });
+
+  // Show tool details (placeholder function)
+  function showToolDetails(toolName) {
+    window.location.href = toolName;
+    showInterstitialAd('ca-app-pub-2717898931409989/2593964622');
+  }
+
+  // AdMob Interstitial Ad Logic
+  function showInterstitialAd(adUnitId) {
+    const interstitialAd = new google.ads.InterstitialAd({
+      adUnitId: adUnitId,
+    });
+    interstitialAd.load();
+    interstitialAd.show();
+  }
+
+  // Random Interstitial Ad
+  setTimeout(() => {
+    showInterstitialAd('ca-app-pub-2717898931409989/2830269352');
+  }, Math.floor(Math.random() * (120000 - 60000 + 1)) + 60000);
+  </script>
+</body>
+</html>

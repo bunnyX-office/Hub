@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Torque Converter</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-2717898931409989" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background-color: black;
+            color: cyan;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+            text-align: center;
+        }
+
+        /* Neon Glowing Container */
+        .container {
+            max-width: 400px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 100px auto;
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            border: 2px solid cyan;
+            box-shadow: 0 0 10px cyan;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            border: 1px solid cyan;
+            background: rgba(0, 255, 255, 0.2);
+            color: cyan;
+            text-align: center;
+        }
+
+        .btn {
+            background: cyan;
+            color: black;
+            font-weight: bold;
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px cyan;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* AdMob banner */
+        #banner-ad {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            display: none;
+        }
+
+        /* Falling Neon Sparks */
+        .spark {
+            position: absolute;
+            font-size: calc(5px + 10 * random());
+            color: cyan;
+            opacity: 0.7;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            from {
+                transform: translateY(-10vh);
+            }
+            to {
+                transform: translateY(110vh);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>💙 Bunny Torque Converter 💙</h2>
+
+        <label>From:</label>
+        <select id="fromUnit">
+            <option value="Nm">Newton meter (Nm)</option>
+            <option value="kgfm">Kilogram-force meter (kgf·m)</option>
+            <option value="pfi">Pound-force inch (lbf·in)</option>
+            <option value="pff">Pound-force foot (lbf·ft)</option>
+            <option value="ncm">Newton centimeter (N·cm)</option>
+            <option value="knm">Kilonewton meter (kN·m)</option>
+            <option value="dmm">Dyne millimeter (dyne·mm)</option>
+            <option value="dcm">Dyne centimeter (dyne·cm)</option>
+            <option value="dm">Dyne meter (dyne·m)</option>
+            <option value="kgfmm">Kilogram-force millimeter (kgf·mm)</option>
+            <option value="kgfcm">Kilogram-force centimeter (kgf·cm)</option>
+            <option value="gfmm">Gram-force millimeter (gf·mm)</option>
+            <option value="gfcm">Gram-force centimeter (gf·cm)</option>
+            <option value="gfm">Gram-force meter (gf·m)</option>
+            <option value="ofi">Ounce-force inch (ozf·in)</option>
+            <option value="off">Ounce-force foot (ozf·ft)</option>
+        </select>
+
+        <label>To:</label>
+        <select id="toUnit">
+            <option value="Nm">Newton meter (Nm)</option>
+            <option value="kgfm">Kilogram-force meter (kgf·m)</option>
+            <option value="pfi">Pound-force inch (lbf·in)</option>
+            <option value="pff">Pound-force foot (lbf·ft)</option>
+            <option value="ncm">Newton centimeter (N·cm)</option>
+            <option value="knm">Kilonewton meter (kN·m)</option>
+            <option value="dmm">Dyne millimeter (dyne·mm)</option>
+            <option value="dcm">Dyne centimeter (dyne·cm)</option>
+            <option value="dm">Dyne meter (dyne·m)</option>
+            <option value="kgfmm">Kilogram-force millimeter (kgf·mm)</option>
+            <option value="kgfcm">Kilogram-force centimeter (kgf·cm)</option>
+            <option value="gfmm">Gram-force millimeter (gf·mm)</option>
+            <option value="gfcm">Gram-force centimeter (gf·cm)</option>
+            <option value="gfm">Gram-force meter (gf·m)</option>
+            <option value="ofi">Ounce-force inch (ozf·in)</option>
+            <option value="off">Ounce-force foot (ozf·ft)</option>
+        </select>
+
+        <label>Torque Value:</label>
+        <input type="number" id="torqueValue" placeholder="Enter torque" required>
+
+        <button onclick="convertTorque()" class="btn mt-3">Convert</button>
+
+        <h3 class="mt-3" id="result"></h3>
+    </div>
+
+    <!-- AdMob Banner Ad -->
+    <div id="banner-ad">
+        <ins class="adsbygoogle"
+            style="display:inline-block;width:320px;height:50px"
+            data-ad-client="ca-app-pub-2717898931409989"
+            data-ad-slot="5016082019"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            document.getElementById("banner-ad").style.display = "block";
+        </script>
+    </div>
+
+    <script>
+        const conversionRates = {
+            "Nm": 1,
+            "kgfm": 9.80665,
+            "pfi": 0.113,
+            "pff": 1.356,
+            "ncm": 0.01,
+            "knm": 1000,
+            "dmm": 0.0000001,
+            "dcm": 0.00001,
+            "dm": 0.001,
+            "kgfmm": 0.00980665,
+            "kgfcm": 0.0980665,
+            "gfmm": 0.00000980665,
+            "gfcm": 0.0000980665,
+            "gfm": 0.00980665,
+            "ofi": 0.00706,
+            "off": 0.113
+        };
+
+        function convertTorque() {
+            let from = document.getElementById("fromUnit").value;
+            let to = document.getElementById("toUnit").value;
+            let value = parseFloat(document.getElementById("torqueValue").value);
+
+            if (isNaN(value)) {
+                document.getElementById("result").innerText = "Please enter a valid number.";
+                return;
+            }
+
+            let baseValue = value * conversionRates[from];
+            let convertedValue = baseValue / conversionRates[to];
+
+            document.getElementById("result").innerText = 
+                `${value} ${from} = ${convertedValue.toFixed(4)} ${to}`;
+        }
+
+        function createFallingSparks() {
+            setInterval(() => {
+                let spark = document.createElement("div");
+                spark.classList.add("spark");
+                spark.innerText = "✶";
+                spark.style.left = Math.random() * window.innerWidth + "px";
+                spark.style.animationDuration = (Math.random() * 3 + 2) + "s";
+                document.body.appendChild(spark);
+                setTimeout(() => spark.remove(), 5000);
+            }, 300);
+        }
+
+        document.addEventListener("DOMContentLoaded", createFallingSparks);
+    </script>
+
+</body>
+</html>

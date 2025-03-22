@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Love Calculator ♥️</title>
+    <!-- AdMob Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-2717898931409989" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 60px auto;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: #ff4081;
+            font-size: 28px;
+        }
+        select, input, button {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        select, input {
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+        }
+        button {
+            background: linear-gradient(to right, #ff416c, #ff4b2b);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(255, 65, 108, 0.5);
+        }
+        button:hover {
+            background: linear-gradient(to right, #ff4b2b, #ff416c);
+            transform: scale(1.05);
+        }
+        .result-box {
+            display: none;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .ad-banner {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+        .back-button {
+            margin-top: 20px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(106, 17, 203, 0.5);
+        }
+        .back-button:hover {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome To Bunny L❤️ve Calculator!</h1>
+
+    <div class="container">
+        <label>Select Formula:</label>
+        <select id="formula">
+            <option value="eternalBond">💖 Eternal Bond</option>
+            <option value="passionPulse">🔥 Passion Pulse</option>
+            <option value="fateAlignment">💑 Fate Alignment</option>
+            <option value="trueLove">❤️ True Love Matcher</option>
+            <option value="destinySpark">🌟 Destiny Spark</option>
+            <option value="heartbeatSync">💞 Heartbeat Sync</option>
+        </select>
+
+        <input type="text" id="name1" placeholder="Enter Person 1 Name">
+        <input type="text" id="name2" placeholder="Enter Person 2 Name">
+
+        <button onclick="calculateLove()">Calculate Love ♥️</button>
+
+        <div id="result" class="result-box"></div>
+
+        <!-- Back Button -->
+        <button onclick="window.location.href='view.html'" class="back-button">Back to Tools Library</button>
+    </div>
+
+    <!-- Banner Ad -->
+    <div class="ad-banner">
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:320px;height:50px"
+             data-ad-client="ca-app-pub-2717898931409989"
+             data-ad-slot="5016082019"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <script>
+        function calculateLove() {
+            let name1 = document.getElementById('name1').value.trim();
+            let name2 = document.getElementById('name2').value.trim();
+            let formula = document.getElementById('formula').value;
+            let resultBox = document.getElementById('result');
+
+            if (name1 === '' || name2 === '') {
+                resultBox.style.display = 'block';
+                resultBox.style.background = '#ffcccc';
+                resultBox.style.color = '#d32f2f';
+                resultBox.innerText = 'Please enter both names!';
+                return;
+            }
+
+            let lovePercentage = 0;
+            let message = '';
+
+            if (formula === 'eternalBond') {
+                lovePercentage = (name1.length + name2.length) % 100;
+                message = `💖 Eternal Bond: ${lovePercentage}%`;
+                resultBox.style.background = '#ffb3e6';
+                resultBox.style.color = '#ff0066';
+            } 
+            else if (formula === 'passionPulse') {
+                lovePercentage = Math.abs(name1.length - name2.length) * 7 % 100;
+                message = `🔥 Passion Pulse: ${lovePercentage}%`;
+                resultBox.style.background = '#ff9a8b';
+                resultBox.style.color = '#b71c1c';
+            } 
+            else if (formula === 'fateAlignment') {
+                let vowels = (name1 + name2).match(/[aeiou]/gi) || [];
+                lovePercentage = (vowels.length * 15) % 100;
+                message = `💑 Fate Alignment: ${lovePercentage}%`;
+                resultBox.style.background = '#ffeb3b';
+                resultBox.style.color = '#b8860b';
+            } 
+            else if (formula === 'heartbeatSync') {
+                lovePercentage = Math.floor(Math.random() * 101);
+                message = `💞 Heartbeat Sync: ${lovePercentage}%`;
+                resultBox.style.background = '#ff5722';
+                resultBox.style.color = '#fff';
+            } 
+            else if (formula === 'destinySpark') {
+                let sum = 0;
+                (name1 + name2).split('').forEach(char => sum += char.charCodeAt(0));
+                lovePercentage = (sum % 100);
+                message = `🌟 Destiny Spark: ${lovePercentage}%`;
+                resultBox.style.background = '#2196F3';
+                resultBox.style.color = '#fff';
+            } 
+            else if (formula === 'trueLove') {
+                lovePercentage = (name1.length * name2.length) % 100;
+                message = `❤️ True Love: ${lovePercentage}%`;
+                resultBox.style.background = '#4CAF50';
+                resultBox.style.color = '#fff';
+            }
+
+            resultBox.style.display = 'block';
+            resultBox.innerText = message;
+
+            // Show interstitial ad when button is clicked
+            showInterstitialAd("ca-app-pub-2717898931409989/2593964622");
+        }
+
+        // Show interstitial ad
+        function showInterstitialAd(adUnit) {
+            if (window.admob) {
+                admob.interstitial.load({ adUnitId: adUnit }).then(() => {
+                    admob.interstitial.show();
+                }).catch(() => {});
+            }
+        }
+
+        // Random interstitial ad between 60-120 seconds
+        function setupRandomInterstitial() {
+            let delay = Math.floor(Math.random() * (120 - 60 + 1) + 60) * 1000;
+            setTimeout(() => {
+                showInterstitialAd("ca-app-pub-2717898931409989/2830269352");
+                setupRandomInterstitial();
+            }, delay);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setupRandomInterstitial();
+        });
+    </script>
+</body>
+</html>

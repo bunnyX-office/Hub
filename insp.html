@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Web Inspector</title>
+    <!-- AdMob Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-2717898931409989" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e1e1e, #2c3e50);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+        .input-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        input {
+            width: 60%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background: #333;
+            color: white;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 5px;
+            border: none;
+            border-radius: 5px;
+            background: #4CAF50;
+            color: white;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .controls {
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .controls button {
+            background: #2196F3;
+        }
+        .controls button:hover {
+            background: #1976D2;
+        }
+        .controls .copy-btn {
+            background: #f44336;
+        }
+        .controls .copy-btn:hover {
+            background: #d32f2f;
+        }
+        pre {
+            background: #282c34;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: left;
+            overflow-x: auto;
+            max-height: 400px;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        #banner-ad {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+        .back-btn {
+            margin-top: 20px;
+            background: #6c757d;
+        }
+        .back-btn:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <h2>Bunny Web Inspector</h2>
+
+    <div class="input-container">
+        <input type="text" id="url" placeholder="Enter URL and press Enter..." />
+        <button onclick="fetchPage()">Inspect</button>
+    </div>
+
+    <div class="controls">
+        <button onclick="copyCode()" class="copy-btn">Copy Code</button>
+        <button onclick="toggleWordWrap()">Toggle Word Wrap</button>
+         <button onclick="window.location.href='view.html'" class="copy-btn">Back to Tools Library</button>
+    </div>
+
+    <h3>HTML Source Code:</h3>
+    <pre id="source-code">Enter a URL and press Enter or click "Inspect" to see the source code.</pre>
+
+    <!-- Back Button -->
+   
+
+    <!-- Banner Ad -->
+    <div id="banner-ad">
+        <ins class="adsbygoogle"
+            style="display:inline-block;width:320px;height:50px"
+            data-ad-client="ca-app-pub-2717898931409989"
+            data-ad-slot="5016082019"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <script>
+        const sourceCode = document.getElementById("source-code");
+        const urlInput = document.getElementById("url");
+
+        // Fetch on Enter Key Press
+        urlInput.addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                fetchPage();
+            }
+        });
+
+        async function fetchPage() {
+            let url = urlInput.value;
+            if (!url.startsWith("http")) url = "https://" + url;
+
+            sourceCode.textContent = "Getting source code...";
+
+            try {
+                const response = await fetch("https://api.allorigins.win/get?url=" + encodeURIComponent(url));
+                const data = await response.json();
+                sourceCode.textContent = data.contents || "No source code available.";
+            } catch (error) {
+                sourceCode.textContent = "Error fetching page: " + error;
+            }
+            showInterstitialAd("ca-app-pub-2717898931409989/2593964622");
+        }
+
+        function copyCode() {
+            const text = sourceCode.textContent;
+            const tempTextArea = document.createElement("textarea");
+            tempTextArea.value = text;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(tempTextArea);
+            alert("Code copied to clipboard!");
+        }
+
+        function toggleWordWrap() {
+            if (sourceCode.style.whiteSpace === "pre-wrap") {
+                sourceCode.style.whiteSpace = "pre";
+            } else {
+                sourceCode.style.whiteSpace = "pre-wrap";
+            }
+        }
+
+        // AdMob Interstitial Ad Logic
+        function showInterstitialAd(adUnit) {
+            if (window.admob) {
+                admob.interstitial.load({ adUnitId: adUnit }).then(() => {
+                    admob.interstitial.show();
+                }).catch(() => {});
+            }
+        }
+
+        // Random Interstitial Ad
+        function setupRandomInterstitial() {
+            let delay = Math.floor(Math.random() * (120 - 60 + 1) + 60) * 1000;
+            setTimeout(() => {
+                showInterstitialAd("ca-app-pub-2717898931409989/2830269352");
+                setupRandomInterstitial();
+            }, delay);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setupRandomInterstitial();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Area Converter</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- AdMob Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-2717898931409989" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        select, input {
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .btn {
+            background: #ffcc00;
+            color: black;
+            font-weight: bold;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #banner-ad {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            display: none; /* Hide the ad initially */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📏 Bunny Area Converter</h2>
+        
+        <label>From:</label>
+        <select id="fromUnit">
+            <option value="km2">Square Kilometer (km²)</option>
+            <option value="ha">Hectare (ha)</option>
+            <option value="m2">Square Meter (m²)</option>
+            <option value="ac">Acre (ac)</option>
+            <option value="mile2">Square Mile (mile²)</option>
+            <option value="yd2">Square Yard (yd²)</option>
+            <option value="ft2">Square Foot (ft²)</option>
+            <option value="in2">Square Inch (in²)</option>
+            <option value="da2">Decare (da²)</option>
+            <option value="dam2">Square Dekameter (dam²)</option>
+            <option value="microm2">Square Micrometer (µm²)</option>
+        </select>
+
+        <label>To:</label>
+        <select id="toUnit">
+            <option value="km2">Square Kilometer (km²)</option>
+            <option value="ha">Hectare (ha)</option>
+            <option value="m2">Square Meter (m²)</option>
+            <option value="ac">Acre (ac)</option>
+            <option value="mile2">Square Mile (mile²)</option>
+            <option value="yd2">Square Yard (yd²)</option>
+            <option value="ft2">Square Foot (ft²)</option>
+            <option value="in2">Square Inch (in²)</option>
+            <option value="da2">Decare (da²)</option>
+            <option value="dam2">Square Dekameter (dam²)</option>
+            <option value="microm2">Square Micrometer (µm²)</option>
+        </select>
+
+        <label>Area:</label>
+        <input type="number" id="area" placeholder="Enter area" required>
+
+        <button onclick="convertArea()" class="btn mt-3">Convert</button>
+
+        <h3 class="mt-3" id="result"></h3>
+        <button onclick="window.location.href='view.html'" class="btn btn-secondary mt-3">Back to Tools Library</button>
+    </div>
+
+    <!-- AdMob Banner Ad -->
+    <div id="banner-ad">
+        <ins class="adsbygoogle"
+            style="display:inline-block;width:320px;height:50px"
+            data-ad-client="ca-app-pub-2717898931409989"
+            data-ad-slot="5016082019"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            document.getElementById("banner-ad").style.display = "block"; // Show ad when loaded
+        </script>
+    </div>
+
+    <script>
+        function convertArea() {
+            let from = document.getElementById("fromUnit").value;
+            let to = document.getElementById("toUnit").value;
+            let area = parseFloat(document.getElementById("area").value);
+            
+            if (isNaN(area)) {
+                document.getElementById("result").innerText = "Please enter a valid number.";
+                return;
+            }
+
+            let baseArea;
+
+            // Convert input to square meters (m²) first
+            let conversionRates = {
+                "km2": 1e6, "ha": 1e4, "m2": 1, "ac": 4046.86,
+                "mile2": 2.59e6, "yd2": 0.836127, "ft2": 0.092903,
+                "in2": 0.00064516, "da2": 1000, "dam2": 100,
+                "microm2": 1e-12
+            };
+
+            baseArea = area * conversionRates[from];
+
+            // Convert from square meters to target unit
+            let resultArea = baseArea / conversionRates[to];
+
+            document.getElementById("result").innerText = 
+                `${area} ${from} = ${resultArea.toFixed(6)} ${to}`;
+
+            showInterstitialAd("ca-app-pub-2717898931409989/2593964622");
+        }
+
+        function showInterstitialAd(adUnit) {
+            if (window.admob) {
+                admob.interstitial.load({ adUnitId: adUnit }).then(() => {
+                    admob.interstitial.show();
+                }).catch(() => {});
+            }
+        }
+
+        function setupRandomInterstitial() {
+            let delay = Math.floor(Math.random() * (120 - 60 + 1) + 60) * 1000;
+            setTimeout(() => {
+                showInterstitialAd("ca-app-pub-2717898931409989/2830269352");
+                setupRandomInterstitial();
+            }, delay);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setupRandomInterstitial();
+        });
+    </script>
+</body>
+</html>

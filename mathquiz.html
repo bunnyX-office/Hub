@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Infinite Math Quiz</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- AdMob Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-2717898931409989" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: rgba(0, 0, 0, 0.7); /* Transparent background */
+            color: #f4d03f; /* Gold color text */
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            transition: 0.3s;
+        }
+        .quiz-box {
+            width: 90%;
+            max-width: 600px;
+            margin: auto;
+            padding: 20px;
+            border: 2px solid #f4d03f; /* Gold border */
+            box-shadow: 0 0 10px rgba(244, 208, 63, 0.3);
+            border-radius: 10px;
+            background-color: rgba(0, 0, 0, 0.6); /* Transparent background with slight dark */
+            transition: 0.3s;
+        }
+        .btn-action {
+            margin: 5px;
+            padding: 10px;
+            border: 2px solid #f4d03f; /* Gold border */
+            background: transparent;
+            color: #f4d03f; /* Gold color text */
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: 0.3s;
+            width: 100%;
+        }
+        .btn-action:hover {
+            background: #f4d03f; /* Gold background */
+            color: #000; /* Black text */
+        }
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 15px;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            list-style-type: none;
+            padding: 0;
+        }
+        .options li {
+            margin: 0;
+        }
+        .scoreboard {
+            margin-top: 20px;
+            font-size: 1.1em;
+        }
+        #banner-ad {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="quiz-box">
+        <h1>Bunny Infinite Algebra Quiz</h1>
+        <a href="view.html" style="color: #f4d03f; font-weight: 600;">Back to tools library</a>
+        <div id="quiz-container">Loading questions...</div>
+        <div class="scoreboard">
+            <p>Correct Answers: <span id="correct-score">0</span></p>
+            <p>Wrong Answers: <span id="wrong-score">0</span></p>
+        </div>
+    </div>
+
+    <!-- Banner Ad -->
+    <div id="banner-ad">
+        <ins class="adsbygoogle"
+            style="display:inline-block;width:320px;height:50px"
+            data-ad-client="ca-app-pub-2717898931409989"
+            data-ad-slot="5016082019"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <script>
+        const quizContainer = document.getElementById('quiz-container');
+        const correctScoreElement = document.getElementById('correct-score');
+        const wrongScoreElement = document.getElementById('wrong-score');
+        
+        let correctScore = localStorage.getItem('correctScore') ? parseInt(localStorage.getItem('correctScore')) : 0;
+        let wrongScore = localStorage.getItem('wrongScore') ? parseInt(localStorage.getItem('wrongScore')) : 0;
+        
+        correctScoreElement.textContent = correctScore;
+        wrongScoreElement.textContent = wrongScore;
+
+        async function fetchQuestion() {
+            quizContainer.innerHTML = "Loading new question...";
+            try {
+                let response = await fetch("https://opentdb.com/api.php?amount=1&category=19&type=multiple");
+                let data = await response.json();
+                let questionData = data.results[0];
+                displayQuestion(questionData);
+            } catch (error) {
+                quizContainer.innerHTML = "Failed to load question. Try again.";
+            }
+        }
+
+        function displayQuestion(questionData) {
+            quizContainer.innerHTML = '';
+            let options = [...questionData.incorrect_answers, questionData.correct_answer].sort(() => Math.random() - 0.5);
+
+            const questionElement = document.createElement('div');
+            questionElement.className = 'question';
+            questionElement.innerHTML = `<p>${questionData.question}</p>`;
+
+            const optionsList = document.createElement('ul');
+            optionsList.className = 'options';
+
+            options.forEach(answer => {
+                const listItem = document.createElement('li');
+                const button = document.createElement('button');
+                button.className = 'btn-action';
+                button.innerHTML = answer;
+                button.onclick = () => checkAnswer(answer, questionData.correct_answer);
+                listItem.appendChild(button);
+                optionsList.appendChild(listItem);
+            });
+
+            quizContainer.appendChild(questionElement);
+            quizContainer.appendChild(optionsList);
+        }
+
+        function checkAnswer(selectedAnswer, correctAnswer) {
+            const explanationElement = document.createElement('p');
+            explanationElement.className = 'explanation';
+
+            if (selectedAnswer === correctAnswer) {
+                correctScore++;
+                explanationElement.innerHTML = `<b>Correct!</b> The answer is ${correctAnswer}.`;
+            } else {
+                wrongScore++;
+                explanationElement.innerHTML = `<b>Wrong!</b> The correct answer was: ${correctAnswer}.`;
+            }
+
+            correctScoreElement.textContent = correctScore;
+            wrongScoreElement.textContent = wrongScore;
+            localStorage.setItem('correctScore', correctScore);
+            localStorage.setItem('wrongScore', wrongScore);
+
+            quizContainer.appendChild(explanationElement);
+            showInterstitialAd("ca-app-pub-2717898931409989/2593964622");
+            setTimeout(fetchQuestion, 3000);
+        }
+
+        function showInterstitialAd(adUnit) {
+            if (window.admob) {
+                admob.interstitial.load({ adUnitId: adUnit }).then(() => {
+                    admob.interstitial.show();
+                }).catch(() => {});
+            }
+        }
+
+        function setupRandomInterstitial() {
+            let delay = Math.floor(Math.random() * (120 - 60 + 1) + 60) * 1000;
+            setTimeout(() => {
+                showInterstitialAd("ca-app-pub-2717898931409989/2830269352");
+                setupRandomInterstitial();
+            }, delay);
+        }
+
+        window.onload = () => {
+            fetchQuestion();
+            setupRandomInterstitial();
+        };
+    </script>
+</body>
+</html>

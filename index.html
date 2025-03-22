@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bunny Tools</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <!-- AdMob Script -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-2717898931409989" crossorigin="anonymous"></script>
+  <!-- Custom CSS -->
+  <style>
+    body {
+      background: linear-gradient(135deg, red 0%, yellow 100%);
+      color: #000;
+      font-family: 'Poppins', sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+    }
+    .btn-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .btn-custom {
+      margin: 10px 0;
+      padding: 15px 30px;
+      font-size: 18px;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      transition: all 0.3s ease;
+      width: 400px;
+      text-align: center;
+    }
+    .btn-custom:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .btn-custom:active {
+      transform: scale(0.95);
+    }
+    .modal-content {
+      background: linear-gradient(135deg, orange 0%, orangered 100%);
+      color: #fff;
+      border: none;
+      border-radius: 15px;
+    }
+    .form-control {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #fff;
+      margin-bottom: 15px;
+    }
+    .form-control::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+    .form-control:focus {
+      background: rgba(255, 255, 255, 0.2);
+      box-shadow: none;
+      color: #fff;
+    }
+    .ad-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1 class="display-4 mb-4">Murgrip Tools</h1>
+    <div class="btn-container">
+      <a href="view.html" class="btn btn-custom" id="viewBtn">Tools</a>
+      <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#messageModal" id="sendMessageBtn">Send Message</button>
+      <button class="btn btn-custom"  onclick="window.location.href='https://www.termsfeed.com/live/91d91cb6-d01a-453b-86ce-610308c36d93'">Privacy policy</button>
+      <button class="btn btn-custom" onclick="window.location.reload()" id="comingSoonBtn">Coming Soon</button>
+    </div>
+  </div>
+
+  <!-- Modal for Send Message -->
+  <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="messageModalLabel">Send Message</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+         <form action="https://api.web3forms.com/submit" method="POST">
+    <input type="hidden" name="access_key" value="cdb2b444-1286-4433-89bb-3aa04967f384">
+    <div class="mb-3">
+        <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+    </div>
+    <div class="mb-3">
+        <input type="email" name="email" class="form-control" id="email" placeholder="Your Email" required>
+    </div>
+    <div class="mb-3">
+        <input type="text" name="subject" class="form-control" id="subject" placeholder="Subject" required>
+    </div>
+    <div class="mb-3">
+        <textarea name="message" class="form-control" id="message" rows="3" placeholder="Your Message" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary" style="background-color:red">Submit Form</button>
+</form>
+          </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- AdMob Banner Ad -->
+  <div class="ad-banner">
+    <ins class="adsbygoogle"
+         style="display:inline-block;width:320px;height:50px"
+         data-ad-client="ca-app-pub-2717898931409989"
+         data-ad-slot="5016082019"></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+  <script>
+    // Form submission handling
+    
+
+    // AdMob Interstitial Ad Logic
+    function showInterstitialAd(adUnitId) {
+      const interstitialAd = new google.ads.InterstitialAd({
+        adUnitId: adUnitId,
+      });
+      interstitialAd.load();
+      interstitialAd.show();
+    }
+
+    document.getElementById('viewBtn').addEventListener('click', () => {
+      showInterstitialAd('ca-app-pub-2717898931409989/2593964622');
+    });
+    document.getElementById('sendMessageBtn').addEventListener('click', () => {
+      showInterstitialAd('ca-app-pub-2717898931409989/2593964622');
+    });
+    document.getElementById('comingSoonBtn').addEventListener('click', () => {
+      showInterstitialAd('ca-app-pub-2717898931409989/2593964622');
+    });
+
+    // Random Interstitial Ad
+    setTimeout(() => {
+      showInterstitialAd('ca-app-pub-2717898931409989/2830269352');
+    }, Math.floor(Math.random() * (120000 - 60000 + 1)) + 60000);
+  </script>
+</body>
+</html>

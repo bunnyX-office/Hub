@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Simple Calculator</title>
+    <!-- AdMob Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-2717898931409989" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e1e1e, #2c3e50);
+            color: white;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .back-btn {
+            background: #6c757d;
+            border: none;
+            border-radius: 5px;
+            padding: 8px 12px;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .back-btn:hover {
+            background: #5a6268;
+        }
+        .calculator {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+        }
+        .display {
+            background: #282c34;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: right;
+            font-size: 24px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            min-height: 40px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        button {
+            padding: 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        button.operator {
+            background: #2196F3;
+        }
+        button.operator:hover {
+            background: #1976D2;
+        }
+        button.function {
+            background: #f44336;
+        }
+        button.function:hover {
+            background: #d32f2f;
+        }
+        #banner-ad {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>
+        Bunny Scientific Calculator
+        <button onclick="window.location.href='view.html'" class="back-btn">Back to Tools Library</button>
+    </h2>
+
+    <div class="calculator">
+        <div id="display" class="display"></div>
+        <div class="buttons">
+            <button onclick="clearAll()" class="function">C</button>
+            <button onclick="deleteLast()" class="function">d</button>
+            <button onclick="appendOperator('/')" class="operator">/</button>
+            <button onclick="appendOperator('×')" class="operator">×</button>
+            <button onclick="appendNumber('7')">7</button>
+            <button onclick="appendNumber('8')">8</button>
+            <button onclick="appendNumber('9')">9</button>
+            <button onclick="appendOperator('-')" class="operator">-</button>
+            <button onclick="appendNumber('4')">4</button>
+            <button onclick="appendNumber('5')">5</button>
+            <button onclick="appendNumber('6')">6</button>
+            <button onclick="appendOperator('+')" class="operator">+</button>
+            <button onclick="appendNumber('1')">1</button>
+            <button onclick="appendNumber('2')">2</button>
+            <button onclick="appendNumber('3')">3</button>
+            <button onclick="appendOperator('^')" class="operator">^</button>
+            <button onclick="appendNumber('0')">0</button>
+            <button onclick="appendNumber('.')">.</button>
+            <button onclick="appendFunction('sqrt')" class="function">√</button>
+            <button onclick="calculate()" class="operator">=</button>
+            <button onclick="appendFunction('sin')" class="function">sin</button>
+            <button onclick="appendFunction('cos')" class="function">cos</button>
+            <button onclick="appendFunction('tan')" class="function">tan</button>
+            <button onclick="appendFunction('log')" class="function">log</button>
+            <button onclick="appendOperator('(')">(</button>
+            <button onclick="appendOperator(')')">)</button>
+        </div>
+    </div>
+
+    <!-- Banner Ad -->
+    <div id="banner-ad">
+        <ins class="adsbygoogle"
+            style="display:inline-block;width:320px;height:50px"
+            data-ad-client="ca-app-pub-2717898931409989"
+            data-ad-slot="5016082019"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+
+    <script>
+        const display = document.getElementById("display");
+
+        function appendNumber(number) {
+            if (display.textContent === "Error") {
+                display.textContent = number;
+            } else {
+                display.textContent += number;
+            }
+        }
+
+        function appendOperator(operator) {
+            const lastChar = display.textContent.slice(-1);
+            if (display.textContent !== "" && !isOperator(lastChar)) {
+                display.textContent += operator;
+            }
+        }
+
+        function appendFunction(func) {
+            display.textContent += func + "(";
+        }
+
+        function clearAll() {
+            display.textContent = "";
+            showInterstitialAd("ca-app-pub-2717898931409989/2593964622");
+        }
+
+        function deleteLast() {
+            if (display.textContent.length > 0) {
+                display.textContent = display.textContent.slice(0, -1);
+            }
+        }
+
+        function calculate() {
+            try {
+                let expression = display.textContent.replace(/×/g, "*").replace(/√/g, "Math.sqrt");
+                expression = expression.replace(/sin/g, "Math.sin").replace(/cos/g, "Math.cos");
+                expression = expression.replace(/tan/g, "Math.tan").replace(/log/g, "Math.log10");
+                display.textContent = eval(expression);
+            } catch (error) {
+                display.textContent = "Error";
+            }
+            showInterstitialAd("ca-app-pub-2717898931409989/2593964622");
+        }
+
+        function isOperator(char) {
+            return ["+", "-", "×", "/", "^"].includes(char);
+        }
+
+        // AdMob Interstitial Ad Logic
+        function showInterstitialAd(adUnit) {
+            if (window.admob) {
+                admob.interstitial.load({ adUnitId: adUnit }).then(() => {
+                    admob.interstitial.show();
+                }).catch(() => {});
+            }
+        }
+
+        // Random Interstitial Ad
+        function setupRandomInterstitial() {
+            let delay = Math.floor(Math.random() * (120 - 60 + 1) + 60) * 1000;
+            setTimeout(() => {
+                showInterstitialAd("ca-app-pub-2717898931409989/2830269352");
+                setupRandomInterstitial();
+            }, delay);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setupRandomInterstitial();
+        });
+    </script>
+</body>
+</html>

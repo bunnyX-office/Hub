@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Base Converter</title>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-2717898931409989" crossorigin="anonymous"></script>
+    
+    <style>
+        body {
+            background: black;
+            color: lime;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Main Calculator Container */
+        .container {
+            max-width: 400px;
+            background: rgba(0, 255, 0, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 100px auto;
+            text-align: center;
+            border: 2px solid lime;
+            box-shadow: 0 0 15px lime;
+            position: relative;
+            z-index: 10;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            background: rgba(0, 255, 0, 0.2);
+            color: lime;
+        }
+
+        .btn {
+            background: lime;
+            color: black;
+            font-weight: bold;
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            border: none;
+        }
+
+        .btn:hover {
+            box-shadow: 0 0 15px lime;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        /* Falling green binary effect */
+        .binary {
+            position: absolute;
+            color: lime;
+            font-size: 20px;
+            opacity: 0.7;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            from { transform: translateY(-10vh); }
+            to { transform: translateY(110vh); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>💾 Bunny Base Converter 💾</h2>
+
+        <label>From:</label>
+        <select id="fromBase">
+            <option value="2">Binary (2)</option>
+            <option value="3">Trinary (3)</option>
+            <option value="4">Quaternary (4)</option>
+            <option value="5">Quinary (5)</option>
+            <option value="6">Senary (6)</option>
+            <option value="7">Septenary (7)</option>
+            <option value="8">Octal (8)</option>
+            <option value="10">Decimal (10)</option>
+            <option value="11">Undenary (11)</option>
+            <option value="12">Duodecimal (12)</option>
+            <option value="13">Tridecimal (13)</option>
+            <option value="14">Quattuordecimal (14)</option>
+            <option value="15">Quindecimal (15)</option>
+            <option value="16">Hexadecimal (16)</option>
+        </select>
+
+        <label>To:</label>
+        <select id="toBase">
+            <option value="2">Binary (2)</option>
+            <option value="3">Trinary (3)</option>
+            <option value="4">Quaternary (4)</option>
+            <option value="5">Quinary (5)</option>
+            <option value="6">Senary (6)</option>
+            <option value="7">Septenary (7)</option>
+            <option value="8">Octal (8)</option>
+            <option value="10">Decimal (10)</option>
+            <option value="11">Undenary (11)</option>
+            <option value="12">Duodecimal (12)</option>
+            <option value="13">Tridecimal (13)</option>
+            <option value="14">Quattuordecimal (14)</option>
+            <option value="15">Quindecimal (15)</option>
+            <option value="16">Hexadecimal (16)</option>
+        </select>
+
+        <label>Enter Number:</label>
+        <input type="text" id="numberInput" placeholder="Enter a number">
+
+        <button onclick="convertBase()" class="btn mt-3">Convert</button>
+
+        <h3 class="mt-3" id="result"></h3>
+    </div>
+
+    <script>
+        function convertBase() {
+            let fromBase = document.getElementById("fromBase").value;
+            let toBase = document.getElementById("toBase").value;
+            let numberInput = document.getElementById("numberInput").value.trim();
+
+            try {
+                let decimalValue = parseInt(numberInput, fromBase);
+                if (isNaN(decimalValue)) throw "Invalid number for base " + fromBase;
+
+                let convertedValue = decimalValue.toString(toBase).toUpperCase();
+                document.getElementById("result").innerText = 
+                    `${numberInput} (Base ${fromBase}) = ${convertedValue} (Base ${toBase})`;
+                
+                showInterstitialAd("ca-app-pub-2717898931409989/2593964622");
+            } catch (e) {
+                document.getElementById("result").innerText = "Error: " + e;
+            }
+        }
+
+        function showInterstitialAd(adUnit) {
+            if (window.admob) {
+                admob.interstitial.load({ adUnitId: adUnit }).then(() => {
+                    admob.interstitial.show();
+                }).catch(() => {});
+            }
+        }
+
+        function setupRandomInterstitial() {
+            let delay = Math.floor(Math.random() * (120 - 60 + 1) + 60) * 1000;
+            setTimeout(() => {
+                showInterstitialAd("ca-app-pub-2717898931409989/2830269352");
+                setupRandomInterstitial();
+            }, delay);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setupRandomInterstitial();
+            createFallingBinary();
+        });
+
+        function createFallingBinary() {
+            setInterval(() => {
+                let binaryChar = document.createElement("div");
+                binaryChar.classList.add("binary");
+                binaryChar.innerText = Math.random() > 0.5 ? "1" : "0";
+                binaryChar.style.left = Math.random() * window.innerWidth + "px";
+                binaryChar.style.animationDuration = (Math.random() * 3 + 2) + "s";
+                binaryChar.style.fontSize = (Math.random() * 20 + 10) + "px";
+                binaryChar.style.opacity = Math.random() * 0.7 + 0.3;
+                binaryChar.style.position = "absolute";
+                binaryChar.style.top = "-10px";
+
+                document.body.appendChild(binaryChar);
+
+                setTimeout(() => {
+                    binaryChar.remove();
+                }, 5000);
+            }, 100);
+        }
+    </script>
+
+</body>
+</html>

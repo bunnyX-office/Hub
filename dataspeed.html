@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Data Transfer Converter</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-app-pub-2717898931409989" crossorigin="anonymous"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 400px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        select, input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        .btn {
+            background: #ffcc00;
+            color: black;
+            font-weight: bold;
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        #banner-ad {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>🌐 Bunny Data Transfer Converter</h2>
+        
+        <label>From:</label>
+        <select id="fromUnit">
+            <option value="bps">Bits per second (bps)</option>
+            <option value="kbps">Kilobits per second (Kbps)</option>
+            <option value="mbps">Megabits per second (Mbps)</option>
+            <option value="gbps">Gigabits per second (Gbps)</option>
+            <option value="tbps">Terabits per second (Tbps)</option>
+            <option value="pbps">Petabits per second (Pbps)</option>
+            <option value="ebps">Exabits per second (Ebps)</option>
+            <option value="zbps">Zettabits per second (Zbps)</option>
+            <option value="ybps">Yottabits per second (Ybps)</option>
+        </select>
+
+        <label>To:</label>
+        <select id="toUnit">
+            <option value="bps">Bits per second (bps)</option>
+            <option value="kbps">Kilobits per second (Kbps)</option>
+            <option value="mbps">Megabits per second (Mbps)</option>
+            <option value="gbps">Gigabits per second (Gbps)</option>
+            <option value="tbps">Terabits per second (Tbps)</option>
+            <option value="pbps">Petabits per second (Pbps)</option>
+            <option value="ebps">Exabits per second (Ebps)</option>
+            <option value="zbps">Zettabits per second (Zbps)</option>
+            <option value="ybps">Yottabits per second (Ybps)</option>
+        </select>
+
+        <label>Data Rate:</label>
+        <input type="number" id="dataRate" placeholder="Enter rate" required>
+
+        <button onclick="convertRate()" class="btn mt-3">Convert</button>
+
+        <h3 class="mt-3" id="result"></h3>
+        <button onclick="window.location.href='view.html'" class="btn btn-secondary mt-3">Back to Tools Library</button>
+    </div>
+
+    <!-- AdMob Banner Ad -->
+    <div id="banner-ad">
+        <ins class="adsbygoogle"
+            style="display:inline-block;width:320px;height:50px"
+            data-ad-client="ca-app-pub-2717898931409989"
+            data-ad-slot="5016082019"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+            document.getElementById("banner-ad").style.display = "block"; // Show ad when loaded
+        </script>
+    </div>
+
+    <script>
+        function convertRate() {
+            let from = document.getElementById("fromUnit").value;
+            let to = document.getElementById("toUnit").value;
+            let rate = parseFloat(document.getElementById("dataRate").value);
+            
+            if (isNaN(rate)) {
+                document.getElementById("result").innerText = "Please enter a valid number.";
+                return;
+            }
+
+            let baseRate;
+            let conversionRates = {
+                "bps": 1, "kbps": 1e3, "mbps": 1e6, "gbps": 1e9, "tbps": 1e12,
+                "pbps": 1e15, "ebps": 1e18, "zbps": 1e21, "ybps": 1e24
+            };
+
+            baseRate = rate * conversionRates[from];
+            let resultRate = baseRate / conversionRates[to];
+
+            document.getElementById("result").innerText = 
+                `${rate} ${from} = ${resultRate.toFixed(4)} ${to}`;
+
+            showInterstitialAd("ca-app-pub-2717898931409989/2593964622");
+        }
+
+        function showInterstitialAd(adUnit) {
+            if (window.admob) {
+                admob.interstitial.load({ adUnitId: adUnit }).then(() => {
+                    admob.interstitial.show();
+                }).catch(() => {});
+            }
+        }
+
+        function setupRandomInterstitial() {
+            let delay = Math.floor(Math.random() * (120 - 60 + 1) + 60) * 1000;
+            setTimeout(() => {
+                showInterstitialAd("ca-app-pub-2717898931409989/2830269352");
+                setupRandomInterstitial();
+            }, delay);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setupRandomInterstitial();
+        });
+    </script>
+</body>
+</html>

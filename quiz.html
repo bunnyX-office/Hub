@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Trivia Quiz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            color: white;
+            text-align: center;
+            font-family: 'Arial', sans-serif;
+        }
+        .quiz-container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1s ease-in-out;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+        .popup button {
+            margin-top: 10px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .btn-choice {
+            display: block;
+            width: 100%;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <h1 class="fw-bold">GK Quiz</h1>
+        <div class="quiz-container p-4">
+            <h3 id="question">Loading...</h3>
+            <div id="choices" class="d-grid gap-2 mt-3"></div>
+            <p id="result" class="fw-bold mt-3"></p>
+            <button class="btn btn-light mt-2" onclick="nextQuestion()">Next Question</button>
+            <button class="btn btn-warning mt-2" onclick="showScoreboard()">📊 View Scoreboard</button>
+            <button class="btn btn-danger mt-2" onclick="window.location.href='view.html'">⬅ Back</button>
+        </div>
+    </div>
+
+    <!-- Popup for Unanswered Question -->
+    <div id="warningPopup" class="popup">
+        <p>Please complete this question before moving to the next.</p>
+        <button class="btn btn-primary" onclick="closePopup()">OK</button>
+    </div>
+
+    <!-- Scoreboard Popup -->
+    <div id="scorePopup" class="popup">
+        <h3>📊 Your Scoreboard</h3>
+        <p>✅ Correct: <span id="correctCount">0</span></p>
+        <p>❌ Wrong: <span id="wrongCount">0</span></p>
+        <button class="btn btn-secondary" onclick="closeScorePopup()">Close</button>
+    </div>
+
+    <script>
+        let answered = false;
+
+        function fetchQuestion() {
+            answered = false;
+            document.getElementById("result").innerText = "";
+            document.getElementById("choices").innerHTML = "Loading...";
+
+            fetch("https://opentdb.com/api.php?amount=1&category=9&type=multiple")
+                .then(response => response.json())
+                .then(data => {
+                    const questionData = data.results[0];
+                    document.getElementById("question").innerHTML = questionData.question;
+
+                    let choices = [...questionData.incorrect_answers, questionData.correct_answer];
+                    choices.sort(() => Math.random() - 0.5);
+
+                    let choicesHtml = choices.map(choice => 
+                        `<button class="btn btn-outline-light btn-choice" onclick="checkAnswer(this, '${choice}', '${questionData.correct_answer}')">${choice}</button>`
+                    ).join("");
+
+                    document.getElementById("choices").innerHTML = choicesHtml;
+                })
+                .catch(error => console.error("Error fetching data:", error));
+        }
+
+        function checkAnswer(button, selected, correct) {
+            if (answered) return;  // Prevent selecting again
+            answered = true;
+
+            let allChoices = document.querySelectorAll(".btn-choice");
+            allChoices.forEach(btn => btn.disabled = true);  // Disable all choices
+
+            let resultText = selected === correct ? "✅ Correct!" : `❌ Wrong! Correct: ${correct}`;
+            document.getElementById("result").innerText = resultText;
+
+            saveScore(selected === correct ? "✔" : "❌");
+
+            if (selected === correct) {
+                button.classList.add("btn-success");  // Green if correct
+            } else {
+                button.classList.add("btn-danger");  // Red if wrong
+            }
+        }
+
+        function nextQuestion() {
+            if (!answered) {
+                document.getElementById("warningPopup").style.display = "block";
+            } else {
+                fetchQuestion();
+            }
+        }
+
+        function closePopup() {
+            document.getElementById("warningPopup").style.display = "none";
+        }
+
+        function saveScore(outcome) {
+            let scores = JSON.parse(localStorage.getItem("quizScores")) || [];
+            scores.push(outcome);
+            localStorage.setItem("quizScores", JSON.stringify(scores));
+        }
+
+        function showScoreboard() {
+            let scores = JSON.parse(localStorage.getItem("quizScores")) || [];
+            let correctCount = scores.filter(score => score === "✔").length;
+            let wrongCount = scores.filter(score => score === "❌").length;
+
+            document.getElementById("correctCount").innerText = correctCount;
+            document.getElementById("wrongCount").innerText = wrongCount;
+
+            document.getElementById("scorePopup").style.display = "block";
+        }
+
+        function closeScorePopup() {
+            document.getElementById("scorePopup").style.display = "none";
+        }
+
+        fetchQuestion();
+    </script>
+
+</body>
+</html>

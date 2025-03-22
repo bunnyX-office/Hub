@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bunny Image Editor</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body { background: #1c1c1c; color: white; }
+        .container { margin-top: 20px; }
+        canvas { background: #fff; max-width: 100%; }
+        .sidebar { background: #2a2a2a; padding: 15px; height: 100vh; overflow-y: auto; }
+        .preview { text-align: center; }
+    </style>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar: Tools -->
+        <div class="col-md-3 sidebar">
+            <h4>🛠️ Tools</h4>
+            <input type="file" id="uploadImg" class="form-control mb-2">
+
+            <label>Resize:</label>
+            <input type="number" id="resizeWidth" class="form-control mb-2" placeholder="Width">
+            <input type="number" id="resizeHeight" class="form-control mb-2" placeholder="Height">
+            <button class="btn btn-primary w-100" onclick="resizeImage()">Resize</button>
+
+            <label>Compress (0.1 - 1):</label>
+            <input type="number" step="0.1" id="compressVal" class="form-control mb-2">
+            <button class="btn btn-warning w-100" onclick="compressImage()">Compress</button>
+
+            <label>Filters:</label>
+            <select id="filter" class="form-control mb-2">
+                <option value="none">None</option>
+                <option value="grayscale(100%)">Grayscale</option>
+                <option value="sepia(100%)">Sepia</option>
+                <option value="blur(5px)">Blur</option>
+                <option value="contrast(200%)">High Contrast</option>
+            </select>
+            <button class="btn btn-secondary w-100" onclick="applyFilter()">Apply</button>
+
+            <label>Convert Type:</label>
+            <select id="convertType" class="form-control mb-2">
+                <option value="image/png">PNG</option>
+                <option value="image/jpeg">JPG</option>
+                <option value="image/webp">WEBP</option>
+            </select>
+            <button class="btn btn-info w-100" onclick="convertImage()">Convert</button>
+
+            <label>Add Text:</label>
+            <input type="text" id="textInput" class="form-control mb-2" placeholder="Enter text">
+            <input type="color" id="textColor" class="form-control mb-2">
+            <label>Text Position:</label>
+            <input type="number" id="textX" class="form-control mb-2" placeholder="X">
+            <input type="number" id="textY" class="form-control mb-2" placeholder="Y">
+            <button class="btn btn-success w-100" onclick="addText()">Add Text</button>
+
+            <button class="btn btn-light w-100 mt-2" onclick="rotateImage()">Rotate</button>
+            <button class="btn btn-dark w-100 mt-2" onclick="flipImage()">Flip</button>
+
+            <label>File Name:</label>
+            <input type="text" id="fileName" class="form-control mb-2" placeholder="Enter file name">
+
+            <button class="btn btn-primary w-100 mt-3" onclick="shareImage()">📤 Share Image</button>
+            <a href="view.html" class="btn btn-secondary w-100 mt-2">🔙 Back</a>
+        </div>
+
+        <!-- Image Preview -->
+        <div class="col-md-9 preview">
+            <h3>📸 Image Preview</h3>
+            <canvas id="canvas"></canvas>
+        </div>
+    </div>
+</div>
+
+<script>
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+let img = new Image();
+let rotation = 0;
+let flipH = 1, flipV = 1;
+
+document.getElementById("uploadImg").addEventListener("change", function(e) {
+    let reader = new FileReader();
+    reader.onload = function(event) {
+        img.onload = function() {
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+        };
+        img.src = event.target.result;
+    };
+    reader.readAsDataURL(e.target.files[0]);
+});
+
+function resizeImage() {
+    let width = document.getElementById("resizeWidth").value;
+    let height = document.getElementById("resizeHeight").value;
+    if (width && height) {
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+    }
+}
+
+function compressImage() {
+    let val = document.getElementById("compressVal").value;
+    img.src = canvas.toDataURL("image/jpeg", val);
+}
+
+function applyFilter() {
+    canvas.style.filter = document.getElementById("filter").value;
+}
+
+function convertImage() {
+    let type = document.getElementById("convertType").value;
+    img.src = canvas.toDataURL(type);
+}
+
+function addText() {
+    let text = document.getElementById("textInput").value;
+    let color = document.getElementById("textColor").value;
+    let x = document.getElementById("textX").value || 50;
+    let y = document.getElementById("textY").value || 50;
+    ctx.fillStyle = color;
+    ctx.font = "30px Arial";
+    ctx.fillText(text, x, y);
+}
+
+function rotateImage() {
+    rotation = (rotation + 90) % 360;
+    let tempCanvas = document.createElement("canvas");
+    let tempCtx = tempCanvas.getContext("2d");
+
+    if (rotation % 180 === 0) {
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = canvas.height;
+    } else {
+        tempCanvas.width = canvas.height;
+        tempCanvas.height = canvas.width;
+    }
+
+    tempCtx.translate(tempCanvas.width / 2, tempCanvas.height / 2);
+    tempCtx.rotate((rotation * Math.PI) / 180);
+    tempCtx.drawImage(canvas, -canvas.width / 2, -canvas.height / 2);
+    canvas.width = tempCanvas.width;
+    canvas.height = tempCanvas.height;
+    ctx.drawImage(tempCanvas, 0, 0);
+}
+
+function flipImage() {
+    flipH *= -1;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.scale(flipH, 1);
+    ctx.drawImage(img, flipH === -1 ? -canvas.width : 0, 0);
+}
+
+function shareImage() {
+    canvas.toBlob(blob => {
+        let fileName = document.getElementById("fileName").value || "shared_image";
+        let file = new File([blob], fileName + ".png", { type: "image/png" });
+
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+            navigator.share({ title: "Shared Image", files: [file] })
+                .then(() => alert("Image shared successfully!"))
+                .catch(err => console.error("Error sharing:", err));
+        } else {
+            alert("Sharing not supported.");
+        }
+    }, "image/png");
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Painting App</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #99f;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #board {
+      background-color: white;
+      border: 5px solid black;
+      border-radius: 20px;
+      cursor: crosshair; /* Full height minus padding */
+    }
+    .tool {
+      color: white;
+      border-radius: 5px;
+      width: 100%;
+      height: 60px;
+      cursor: pointer;
+      margin: 2px;
+    }
+    .tool:hover {
+      filter: brightness(80%);
+    }
+    input[type=text] {
+      width: 100%;
+      height: 60px;
+      border-radius: 5px;
+      background-color: lightblue;
+      margin: 1px;
+    }
+    .head {
+      cursor: text;
+    }
+    input[type=range] {
+      cursor: pointer;
+    }
+    input:hover {
+      filter: brightness(80%);
+    }
+    #gallery {
+      width: 100%;
+      height: 200px;
+      background-color: #bae;
+      margin: 15px;
+      border: 1px solid #98a;
+      border-radius: 15px;
+      overflow: scroll;
+    }
+    .gallery img {
+      width: 100px;
+      height: 100px;
+      cursor: pointer;
+      border: 1px solid black;
+      border-radius: 15px;
+      background-color: white;
+    }
+    .edit-tools {
+      height: 100vh;
+      overflow-y: auto;
+      background-color: #aaf;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid h-100">
+    <div class="row h-100">
+      <!-- Edit Tools (40% width) -->
+      <div class="col-5 edit-tools">
+        <h1><u>Edit Tab</u></h1>
+        <em>powered my murgrip...</em>
+        <p id="ww">Brush size (0)</p>
+        <input type="range" min="1" max="120" value="5" id="wi" class="form-control">
+        <p class="head"><i><u><b>Select Color</b></u></i></p>
+        Paper : <input type="color" id="bgc" value="#ffffff" class="form-control">
+        Brush : <input type="color" id="colol" class="form-control">
+        <p class="head"><i><u><b>Simple Tools</b></u></i></p>
+        <button class="tool btn btn-warning" onclick="ton()">Eraser</button>
+        <button class="tool btn btn-dark" onclick="toff()">Pen</button>
+        <button class="tool btn btn-danger" onclick="cleari();ctx.clearRect(0,0,canv.width,canv.height)">Clear</button>
+        <p class="head"><i><u><b>File Management</b></u></i></p>
+        <button class="tool btn btn-success" onclick="saveImage()">Save Drawing</button>
+        <button class="tool btn btn-danger" onclick="loadImage()">Load Drawing</button>
+        <button class="tool btn btn-warning" onclick="del()">Delete Drawing</button>
+        <button class="tool btn btn-primary" onclick="down()">Download Drawing</button>
+        <p class="head"><i><u><b>Complex Tools</b></u></i></p>
+        <button class="tool btn btn-warning" onclick="undo()">Undo</button>
+        <button class="tool btn btn-danger" onclick="redo()">Redo</button>
+        <button class="tool btn btn-secondary" onclick="copyFrame()">Copy</button>
+        <button class="tool btn btn-info" onclick="pasteFrame()">Paste</button>
+        <p class="head"><i><u><b>Shape Drawing</b></u></i></p>
+        <input type="text" id="ds" placeholder="Enter : x-pos,y-pos,width,height" class="form-control">
+        <button class="tool btn btn-success" onclick="stroke()">Create</button>
+        <input type="text" id="ds2" placeholder="Enter : x-pos,y-pos,radius" class="form-control">
+        <button class="tool btn btn-success" onclick="circle()">Create</button>
+        <p class="head"><i><u><b>Cursor Coordinate</b></u></i></p>
+        <p id="cor">X : 0 , Y : 0</p>
+        <p class="head"><i><u><b>Color Balls</b></u></i></p>
+        <input type="text" id="cbb" placeholder="Enter : x-pos,y-pos,radius,x-speed,y-speed" class="form-control">
+        <button class="tool btn btn-danger" onclick="colorBall()">Spawn</button>
+        <button class="tool btn btn-dark" onclick="colorBallout()">Despawn</button>
+        <p class="head"><i><u><b>6 - color-Gradient</b></u></i></p>
+        <input type="text" id="grc" placeholder="Enter :6 colors like : c1,c2,c3,c4,c5,c6" class="form-control">
+        <button class="tool btn btn-primary" onclick="setGradient()">Set</button>
+        <button class="tool btn btn-secondary" onclick="resetGradient()">Reset</button>
+        <p class="head"><i><u><b>Frame Animation</b></u></i></p>
+        <button class="tool btn btn-info" onclick="addBook()">Add book</button>
+        <button class="tool btn btn-primary" onclick="addFrame()">Add frame</button>
+        <button class="tool btn btn-danger" onclick="removeFrame()">Remove frame</button>
+        <button class="tool btn btn-success" onclick="runAnimation()">Run</button>
+        <button class="tool btn btn-warning" onclick="stopAnimation()">Stop</button>
+        <button class="tool btn btn-secondary" onclick="nextFrame()">Next</button>
+        <button class="tool btn btn-info" onclick="prevFrame()">Previous</button>
+        <button class="tool btn btn-danger" onclick="exitBook()">Exit book</button>
+        <button class="tool btn btn-primary" onclick="loadBook()">Load book</button>
+        <button class="tool btn btn-success" onclick="saveBook()">Save book</button>
+        <div id="viewFrame"></div>
+        <p id="head"><u><i><b>Gallery of Saved drawing</b></i></u></p>
+        <div id="gallery" class="gallery"></div>
+        <button onclick="window.location.href='index.html'" class="tool bnt " style="background-color:blue;">Back</button>
+      </div>
+      
+      <!-- Canvas (60% width) -->
+      <div class="col-7 p-0">
+        <canvas id="board"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    var canv = document.getElementById("board");
+var cw = window.innerWidth * 0.60; 
+var ch = window.innerHeight;
+var colo = "red";
+var bg = "#ffffff";
+var width = 10;
+var height = 10;
+var px = -200;
+var py = -200;
+var t = "f";
+var v = 1;
+var sS = "t";
+var cb = "f";
+var gc = "f";
+var drawing = false;
+var undos = [];
+var uni = -1;
+var redos = [];
+var rei = -1;
+var f = "f";
+var t = "f";
+var ssl = f;
+var gaphoto = 0;
+// Window Function\\
+
+
+window.onload = () => {
+  canv.width = cw;
+  canv.height = ch;
+  ctx = canv.getContext("2d");
+  requestAnimationFrame(w);
+};
+
+
+// Update function
+
+
+function w(i) {
+  ctx.fillStyle = colo;
+  ctx.fillRect(px, py, width, height);
+  canv.style.backgroundColor = bg;
+  bg = document.getElementById("bgc").value;
+  localStorage.removeItem("drawing_null");
+
+  if (gc === "f") {
+    colo = document.getElementById("colol").value;
+  }
+
+  width = document.getElementById("wi").value;
+
+  if (t === "t") {
+    drawing = false;
+  ctx.clearRect(xc,yc,width,width);
+}
+  document.getElementById("ww").textContent = "Brush size "+"(" + width + ")";
+
+  if (cb === "t") {
+    requestAnimationFrame(colorBall2);
+  }
+  requestAnimationFrame(cord);
+  requestAnimationFrame(w);
+}
+var yc;
+var xc;
+canv.addEventListener("mousemove", (e) => {
+  var rect = canv.getBoundingClientRect();
+ Math.floor(xc = e.clientX - rect.left);
+ Math.floor(yc = e.clientY - rect.top);
+
+})
+canv.addEventListener("touchmove", (e) => {
+  var rect = canv.getBoundingClientRect();
+  Math.floor(xc = e.touches[0].clientX - rect.left);
+   Math.floor(yc = e.touches[0].clientY - rect.top)
+})
+function cord() {
+  document.getElementById("cor").textContent = "X : " + xc + ", Y : " + yc;
+  
+}
+
+
+//Drawing By Mouse
+
+
+canv.addEventListener("contextmenu" , (e) => e.preventDefault());
+canv.addEventListener("mousedown" , (e) => {
+  if (e.button === 0) {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(e.offsetX,e.offsetY);
+  }
+});
+canv.addEventListener("mousemove" , (e) => {
+  if (drawing) {
+    ctx.lineWidth = width;
+    ctx.strokeStyle = colo;
+    ctx.lineCap = "round";
+    ctx.lineTo(e.offsetX,e.offsetY);
+    ctx.stroke();
+  }
+});
+canv.addEventListener("mouseup" , (e) => {
+  if (e.button === 0) {
+    drawing = false;
+    ctx.closePath();
+      undos.push(canv.toDataURL("img/png"))
+      uni += 1;
+  }
+})
+canv.addEventListener("mouseleave",() => {
+  drawing = false;
+  });
+  
+  //DRAWING BY TOUCH
+  
+canv.addEventListener("touchstart", (e) => {
+  e.preventDefault();
+  drawing = true;
+
+  const rect = canv.getBoundingClientRect();
+  const x = e.touches[0].clientX - rect.left;
+  const y = e.touches[0].clientY - rect.top;
+
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+}, { passive: false });
+
+canv.addEventListener("touchmove", (e) => {
+  e.preventDefault();
+  if (!drawing) return;
+
+  const rect = canv.getBoundingClientRect();
+  const x = e.touches[0].clientX - rect.left;
+  const y = e.touches[0].clientY - rect.top;
+
+  ctx.lineWidth = width;
+  ctx.strokeStyle = colo;
+  ctx.lineCap = "round";
+  ctx.lineTo(x, y);
+  ctx.stroke();
+}, { passive: false });
+
+canv.addEventListener("touchend", () => {
+  drawing = false;
+  ctx.closePath();
+  undos.push(canv.toDataURL("image/png"));
+  uni += 1;
+});
+
+canv.addEventListener("touchcancel", () => {
+  drawing = false;
+});
+
+// Gradient with 6 Colors
+
+
+function setGradient() {
+  let gci = document.getElementById("grc").value;
+  let gcs = gci.split(",");
+
+  let color1 = gcs[0].trim();
+  let color2 = gcs[1].trim();
+  let color3 = gcs[2].trim();
+  let color4 = gcs[3].trim();
+  let color5 = gcs[4].trim();
+  let color6 = gcs[5].trim(); 
+
+  gradient = ctx.createLinearGradient(0, 0, canv.width, canv.height);
+  gradient.addColorStop(0, color1);
+  gradient.addColorStop(0.22, color2);
+  gradient.addColorStop(0.44, color3);
+  gradient.addColorStop(0.66, color4);
+  gradient.addColorStop(0.88, color5);
+  gradient.addColorStop(1, color6);
+  gc = "t";
+  colo = gradient;
+}
+
+function resetGradient() {
+  gc = "f";
+  colo = document.getElementById("colol").value;
+}
+
+
+//COLOR BALL
+
+
+function colorBall() {
+  cb = "t";
+  i = document.getElementById("cbb").value;
+  s = i.split(",");
+  x = parseInt(s[0]);
+  y = parseInt(s[1]);
+  r = parseInt(s[2]);
+  dx = parseInt(s[3]);
+  dy = parseInt(s[4]);
+}
+function colorBall2() {
+  ctx.beginPath();
+  ctx.arc(x, y, r, 0, Math.PI * 2);
+  ctx.fillStyle = colo;
+  ctx.fill();
+  ctx.closePath();
+
+  x += dx;
+  y += dy;
+
+  if (x - r < 0 || x + r > canv.width) {
+    dx *= -1;
+  }
+  if (y - r < 0 || y + r > canv.height) {
+    dy *= -1;
+  }
+}
+function colorBallout() {
+  cb = "f";
+  
+}
+
+
+//SAVING AND LOASDING DRAWING
+
+
+function saveImage(i,p) {
+  i = window.prompt("Enter Drawing Name to save!");
+  if (i === "" || i === "null") {
+    window.alert("Don't save drawing as empty string!")
+    return;
+  }
+  else if (localStorage.getItem("drawing_" + i)) {
+    window.alert("Drawing already Exsist!");
+    return;
+  }
+  p = "drawing_" + i;
+  localStorage.setItem(p , canv.toDataURL("img/png"));
+  loadGallery();
+}
+function loadImage(sk,img,sp,sl) {
+  img = new Image();
+  sk = window.prompt("Enter drawing name to Load!");
+  if (sk === "" || sk === "null") {
+    window.alert("Don't load empty drawings!")
+    return;
+  }
+  else if (!localStorage.getItem("drawing_" + sk)) {
+    window.alert("Drawing not found")
+    return;
+  }
+  sl = "drawing_" + sk;
+  img.src = localStorage.getItem(sl);
+img.onload = () => {
+  ctx.drawImage(img, 0, 0 , cw, ch);
+   }
+}
+
+
+//ERESER
+
+
+function ton() {
+  t = "t";
+}
+function toff() {
+  t = "f";
+}
+
+
+//UNDO REDO
+
+
+function undo(img) {
+  redos.push(canv.toDataURL("img/png"));
+  rei += 1;
+  ctx.clearRect(0,0,cw,ch);
+  img = new Image();
+img.src = undos[uni];
+img.onload = () => {
+  ctx.drawImage(img, 0, 0 ,cw , ch);
+  }
+  undos.pop();
+  if (uni > -1) {  uni -= 1;
+  }
+}
+function redo() {
+  undos.push(canv.toDataURL("img/png"));
+  uni += 1;
+  ctx.clearRect(0,0,cw,ch);
+  img = new Image();
+img.src = redos[rei];
+img.onload = () => {
+  ctx.drawImage(img, 0, 0 , cw,ch);
+  }
+  redos.pop();
+  if (rei > -1) {  rei -= 1;
+  }
+}
+function cleari() {
+          undos = [] ;
+             uni = -1;
+          redos.push(canv.toDataURL("img/png"));
+          rei += 1;
+}
+
+
+//DELETE A DRAWING
+
+
+function del(id,ip) {
+  id = window.prompt("Enter file name to delete");
+  ip = "drawing_" + id;
+  if (!localStorage.getItem(ip)) {
+    window.alert("Drawing not found!")
+    return;
+  }
+  localStorage.removeItem("drawing_" + id);
+  alert("Drawing deleted succesfully")
+}
+
+
+//DOWNLOAD A DRAWING
+
+
+function down() {
+  let id = window.prompt("Enter file name to delete");
+  if (!id) return; // Exit if no input
+  
+  let storedFile = localStorage.getItem("drawing_" + id);
+  if (storedFile) {
+    download("drawing_" + id); // Call the download function
+  } else {
+    window.alert("File doesn't exist");
+  }
+}
+
+function download(id) {
+  let storedData = localStorage.getItem(id);
+  if (!storedData) {
+    window.alert("File data not found.");
+    return;
+  }
+
+  let n = window.prompt("Enter a name for your file");
+  if (!n) {
+    n = id;
+  }
+  
+  let fn = n + ".png";
+  let a = document.createElement("a");
+  a.href = storedData;
+  a.download = fn; // Fixed typo
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+
+  window.alert("File created successfully: " + fn); // Fixed typo
+}
+    
+//DRAWING STROKE/Circles  
+    
+  
+function stroke(a,x,y,w,h) {
+  a = document.getElementById("ds").value;
+  b = a.split(',');
+  x = parseInt(b[0]);
+  y = parseInt(b[1]);
+  w = parseInt(b[2]);
+  h = parseInt(b[3]);
+  
+  ctx.fillStyle = colo;
+  ctx.fillRect(x,y,w,h)
+}
+function circle(x,y,r) {
+  c = document.getElementById("ds2").value;
+  d = c.split(',');
+  
+  x = parseInt(d[0]);
+  y = parseInt(d[1]);
+  r = parseInt(d[2]);
+  
+  ctx.beginPath();
+  ctx.arc(x, y , r , 0 , Math.PI * 2 );
+  ctx.fillStyle = colo;
+  ctx.fill();
+  ctx.closePath();
+}
+
+
+
+/*
+
+ANIMATION MAKER
+
+*/
+let bookName = "";
+let frames = [];
+let currentFrame = 0;
+let isPlaying = false;
+let animationInterval;
+
+function addBook() {
+  bookName = prompt("Enter Book Name:");
+  if (bookName) {
+  if  (localStorage.getItem(bookName)){
+      alert("book already exist! or someing is saved with this key/name")
+      return;
+    }
+    frames = [];
+    currentFrame = 0;
+    ctx.clearRect(0, 0, cw, ch);
+  }
+  
+}
+function exitBook() {
+  stopAnimation();
+  bookName = "";
+  frames = [];
+  currentFrame = 0;
+  ctx.clearRect(0, 0, cw, ch);
+}
+
+function addFrame() {
+  frames.push(canv.toDataURL()); // Save as image
+  currentFrame = frames.length - 1;
+  ctx.clearRect(0, 0, cw, ch);
+}
+
+function removeFrame() {
+  if (frames.length > 0) {
+    frames.splice(currentFrame, 1);
+    currentFrame = Math.max(0, currentFrame - 1);
+    redrawFrame();
+  }
+}
+
+function prevFrame() {
+  if (frames.length > 0 && currentFrame > 0) {
+    ctx.clearRect(0,0,cw,ch)
+    currentFrame--;
+    redrawFrame();
+  }
+}
+
+function nextFrame() {
+  if (frames.length > 0 && currentFrame < frames.length - 1) {
+    ctx.clearRect(0,0,cw,ch)
+    currentFrame++;
+    redrawFrame();
+  }
+}
+
+
+        function saveBook() {
+            if (!bookName) {
+                alert("No book to save. Create a book first.");
+                return;
+            }
+            localStorage.setItem(bookName, JSON.stringify(frames));
+            alert("Book saved!");
+        }
+        
+        function loadBook() {
+  let name = prompt("Enter Book Name to Load:");
+  if (name && localStorage.getItem(name)) {
+    bookName = name;
+    frames = JSON.parse(localStorage.getItem(name));
+    currentFrame = 0;
+    redrawFrame();
+  } else {
+    alert("Book not found!");
+  }
+}
+
+function redrawFrame() {
+  if (frames[currentFrame]) {
+    ctx.clearRect(0,0,cw,ch)
+    let img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0 ,cw,ch);
+    img.src = frames[currentFrame];
+  } else {
+    ctx.clearRect(0, 0, cw, ch);
+  }
+}
+
+function runAnimation() {
+  if (frames.length === 0) {
+    alert("No frames to animate!");
+    return;
+  }
+  // Prevent multiple intervals
+  let i = 0;
+  isPlaying = true;
+  animationInterval = setInterval(() => {
+    if (!isPlaying) return;
+    ctx.clearRect(0,0,cw,ch)
+    let img = new Image();
+    img.onload = () => ctx.drawImage(img, 0, 0 , cw,ch);
+    img.src = frames[i];
+    i = (i + 1) % frames.length;
+  }, 200);
+}
+
+function stopAnimation() {
+  isPlaying = false;
+  clearInterval(animationInterval);
+}
+var copy = [];
+function copyFrame() {
+  copy = [];
+  copy.push(canv.toDataURL("img/png"));
+}
+function pasteFrame(limg) {
+  limg = new Image();
+  limg.src = copy[0];
+  limg.onload = () => {
+    ctx.clearRect(0,0,cw,ch)
+  ctx.drawImage(limg,0,0,cw,ch)
+  }
+}
+
+
+//SORTCUTS
+document.addEventListener("keypress" , (e) => {
+      if (e.key === "C") {
+        copyFrame()
+      }
+      if (e.key === "V") {
+        pasteFrame()
+      }
+      if (e.key === "U") {
+        undo()
+      }
+      if (e.key === "R") {
+        redo()
+      }
+      if (e.key === "X") {
+        ctx.clearRect(0,0,cw,ch)
+      }
+      if (e.key === "E") {
+        t = "t"
+      }
+      if (e.key === "N") {
+        t = "f"
+      }
+      if (e.key === "Q") {
+        window.location.reload()
+      }
+   }
+)
+
+//GALLERY\\
+
+function loadGallery() {
+  let gallery = document.getElementById("gallery");
+  gallery.innerHTML = "";
+  for (let i = 0; i < localStorage.length; i++) {
+    let key = localStorage.key(i);
+    if (key.startsWith("drawing_")) {
+      let img = document.createElement("img");
+      img.src = localStorage.getItem(key);
+      img.onclick = () => openPopup(key, img.src);
+      gallery.appendChild(img);
+    }
+  }
+}
+
+function openPopup(key, src , k) {
+  img = new Image();
+  img.src = src;
+  window.alert("File opened , Name " + key) 
+  img.onload = () => {
+    ctx.clearRect(0,0,cw,ch);
+    ctx.drawImage(img,0,0)
+  }
+}
+loadGallery()
+  </script>
+</body>
+</html>
